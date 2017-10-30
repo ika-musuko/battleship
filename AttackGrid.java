@@ -5,7 +5,7 @@ import java.io.*;
 import java.net.*;
 
 /**
-Represents the player's own grid
+Represents the other grid
 */
 public class AttackGrid extends BattleGrid {
     public AttackGrid(String name) {
@@ -18,7 +18,7 @@ public class AttackGrid extends BattleGrid {
     {
         JPanel panel = new JPanel();
         panel.setBackground(Color.white);
-        panel.setBorder(BorderFactory.createLineBorder(Color.red, 5));
+        panel.setBorder(BorderFactory.createLineBorder(Color.purple, 5));
         panel.setPreferredSize(new Dimension(20, 20)); // for demo purposes only
 
         return panel;
