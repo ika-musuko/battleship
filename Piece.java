@@ -6,6 +6,7 @@ public class Piece {
     private int state;
     private int health;
     
+    
     public Piece(int x, int y) {
         this.x = x;
         this.y = y;
