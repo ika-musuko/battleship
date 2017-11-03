@@ -1,17 +1,7 @@
 public class Player {
     public static final int MAX_SHIPS = 5;
     public static final int DEFAULT_BOARD_SIZE = 10;
-    
-    public enum AttackSpace {
-        UNMARKED,
-        MARKED,
-    }
-    
-    public enum SelfSpace {
-        EMPTY,
-        SHIP
-    }
-    
+   
     // constructors
     public Player(String name, int boardSize) {
         this.name = name;
@@ -71,9 +61,20 @@ public class Player {
         return other;
     }
     
+    /// functions to return useful information for display
     // return the player's name
     public String toString() {
         return this.name;
+    }
+    
+    // return the attackBoard
+    public AttackSpace[][] getAttackBoard() {
+        return this.attackBoard;
+    }
+    
+    // return the selfBoard
+     public SelfSpace[][] getSelfBoard() {
+        return this.selfBoard;
     }
     
     private String name;
