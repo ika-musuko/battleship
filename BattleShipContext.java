@@ -8,7 +8,6 @@ public class BattleShipContext {
 
     // some class constants to make sure SetupState chooses its next state properly and we don't end up in an infinite setup loop...
     final boolean NEXT_SETUP = true;
-    final boolean NEXT_PLAY = false;
 
     // constructor, initial setup should be something like:
     // context = new BattleShipContext(player1, player2);
@@ -17,12 +16,12 @@ public class BattleShipContext {
     public BattleShipContext(Player activePlayer, Player waitingPlayer) {
         this.activePlayer = activePlayer;
         this.waitingPlayer = waitingPlayer;
-        this.currentState = SetupState(this.activePlayer, this.waitingPlayer, NEXT_SETUP);
+        this.currentState = new SetupState(this.activePlayer, this.waitingPlayer, NEXT_SETUP);
     }
 
     // call this method when a grid click is detected and pass in the grid coordinates
-    public void gridAction(int x, int y) {
-        this.activePlayer = this.currentState.handleGrid(x, y);
+    public void gridAction(int r, int c) {
+        this.activePlayer = this.currentState.handleGrid(r, c);
     }
 
     // call this method when a click on the next button is detected
@@ -50,7 +49,7 @@ public class BattleShipContext {
         }
 
         // handle a grid event
-        public abstract Player handleGrid(int x, int y);
+        public abstract Player handleGrid(int r, int c);
         // handle the next button
         public abstract BattleState handleNext();
         // output the state to a String
@@ -75,32 +74,32 @@ public class BattleShipContext {
     class SetupState extends BattleState {
         // constructor written with two parameters to stay consistent with rest of hierarchy
         public SetupState(Player activePlayer, Player waitingPlayer) {
-            SetupState(activePlayer, waitingPlayer, true);
+            this(activePlayer, waitingPlayer, true);
         }
         
         // more usable constructor...
         public SetupState(Player activePlayer, Player waitingPlayer, boolean gotoSetup) {
-            super();
+            super(activePlayer, waitingPlayer);
             this.gotoSetup = gotoSetup;
-            this.battleString = activePlayer.name() + " setup";
+            this.battleString = activePlayer.toString() + " setup";
         }
         
         // place or rotate a ship on activePlayer's board
-        public Player handleGrid(int x, int y) {
+        public Player handleGrid(int r, int c) {
             // make sure the below function also doesn't add any ships if there are more than 5 ships
             // note that placeShip will rotate a ship if it already exists instead of creating a new one (extra credit points!!!)
-            this.activePlayer.placeShip(x, y);
+            this.activePlayer.placeShip(r, c);
             return this.activePlayer; // return activePlayer to update in context
         }
 
         // go to the next player's setup state or if all players have finished setting up, begin game with the first player 
         public BattleState handleNext() {
-            if(this.activePlayer.totalShips() < Player.MAX_SHIPS) {
+            if(this.activePlayer.getTotalShips() < Player.MAX_SHIPS) {
                 return this.gotoSetup ? new SetupState(this.waitingPlayer, this.activePlayer, false) 
                                       : new AttackState(this.waitingPlayer, this.activePlayer);
             }
             // if the player has not finished setting up ships, do not change the state
-            this.battleString = activePlayer.name() + "setup /// please place " + Player.MAX_SHIPS + " on the board."; // notify the player that they have not finished setup
+            this.battleString = activePlayer.toString() + "setup /// please place " + Player.MAX_SHIPS + " on the board."; // notify the player that they have not finished setup
             return this; 
         }
 
@@ -110,29 +109,37 @@ public class BattleShipContext {
     // the attacker is activePlayer and the one waiting his turn is waitingPlayer
     class AttackState extends BattleState {
         public AttackState(Player activePlayer, Player waitingPlayer) {
-            super();
-            this.battleString = activePlayer.name() + " attack";
+            super(activePlayer, waitingPlayer);
+            this.battleString = activePlayer.toString() + " attack";
             this.markSet = false;
         }
 
-        public Player handleGrid(int x, int y) {
-            this.markSet = this.activePlayer.setMark(x, y); // handle already marked squares in setMark() method for Player (return a boolean)
+        public Player handleGrid(int r, int c) {
+            Player tempPlayer = this.activePlayer.setMark(r, c); // handle already marked squares in setMark() method for Player
+            if (tempPlayer != null) {
+                this.activePlayer = tempPlayer; 
+                this.markSet = true;
+            }
+            else
+                this.markSet = false;
             return this.activePlayer;
         }
 
         public BattleState handleNext() {
             // if a valid mark has been set...
             if(this.markSet) {
-                this.waitingPlayer = this.activePlayer.attack(this.waitingPlayer); // takes the currently marked square from activePlayer and attacks the waiting player on the corresponding square and updates the waitingPlayer
-                return (this.waitingPlayer.noShips()) ? new WinState(this.activePlayer, this.waitingPlayer); // win if all the other ships on the waitingPlayer's board are gone
+                // takes the currently marked square from activePlayer and attacks the waiting player on the corresponding square and updates the waitingPlayer
+                this.waitingPlayer = this.activePlayer.attack(this.waitingPlayer); 
+                return (this.waitingPlayer.noShips()) ? new WinState(this.activePlayer, this.waitingPlayer) // win if all the other ships on the waitingPlayer's board are gone
                                                       : new AttackState(this.waitingPlayer, this.activePlayer); // next turn
             } 
             
             // else do not change the state
             else {
-                this.battleString = activePlayer.name() + " attack // please mark a valid square to attack";
+                this.battleString = activePlayer.toString() + " attack // please mark a valid square to attack";
                 return this;
             }
+        }
             
         private boolean markSet; // has activePlayer set a mark yet?
     }
@@ -141,11 +148,11 @@ public class BattleShipContext {
     // for now, we will let the game be nonfunctional upon win...
     class WinState extends BattleState {
         public WinState(Player activePlayer, Player waitingPlayer) {
-            super();
-            this.battleString = activePlayer.name() + " win!";
+            super(activePlayer, waitingPlayer);
+            this.battleString = activePlayer.toString() + " win!";
         }
 
-        public Player handleGrid(int x, int y) {
+        public Player handleGrid(int r, int c) {
             return this.activePlayer;
         }
 
