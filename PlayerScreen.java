@@ -6,7 +6,7 @@ import java.net.*;
 
 
 public class PlayerScreen extends JFrame {
-    private Player self;
+    private Player data
  
     public PlayerScreen(String name, boolean show) {
         super(name);
@@ -32,5 +32,10 @@ public class PlayerScreen extends JFrame {
     
     public void hideScreen() {
         this.setVisible(false);
+    }
+    
+    // gets the player data!
+    public Player getPlayerData() {
+        return this.data;
     }
 }

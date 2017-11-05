@@ -1,4 +1,5 @@
 public enum SelfSpace {
     EMPTY,
-    SHIP
+    SHIP,
+    DESTROYED
 }

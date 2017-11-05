@@ -28,6 +28,5 @@ public class AttackGrid extends BattleGrid {
     public void click(MouseEvent e, Cell cell) {
         // handle the event, for instance
         cell.setBackground(Color.GRAY);
-        
     }
 }
