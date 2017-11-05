@@ -14,13 +14,20 @@ public class AttackGrid extends BattleGrid {
     }
 
     @Override
-    protected JPanel getCell()
+    protected Cell getCell(int i, int j)
     {
-        JPanel panel = new JPanel();
-        panel.setBackground(Color.white);
-        panel.setBorder(BorderFactory.createLineBorder(Color.purple, 5));
-        panel.setPreferredSize(new Dimension(20, 20)); // for demo purposes only
+        Cell cell = new Cell(i, j);
+        cell.setBackground(Color.white);
+        cell.setBorder(BorderFactory.createLineBorder(Color.MAGENTA, 5));
+        cell.setPreferredSize(new Dimension(20, 20)); // for demo purposes only
 
-        return panel;
+        return cell;
+    }
+    
+    @Override 
+    public void click(MouseEvent e, Cell cell) {
+        // handle the event, for instance
+        cell.setBackground(Color.GRAY);
+        
     }
 }

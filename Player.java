@@ -81,6 +81,6 @@ public class Player {
     private int currentMarkR;
     private int currentMarkC;
     private int totalShips;
-    private AttackSpace[][] attackBoard; // place marks on this board
-    private SelfSpace[][] selfBoard; // place ships / monitor ship progress on this board
+    private AttackSpace[][] attackBoard; // place marks on this board (AttackSpace is just an enum)
+    private SelfSpace[][] selfBoard; // place ships / monitor ship progress on this board (SelfSpace is just an enum)
 }
