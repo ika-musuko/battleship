@@ -6,9 +6,6 @@ import java.net.*;
 
 public abstract class BattleGrid extends JPanel{
 
-
-
-    
     public BattleGrid() {
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         JPanel self = new JPanel();
