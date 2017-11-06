@@ -22,7 +22,7 @@ public class AttackGrid extends BattleGrid {
         Cell cell = new Cell(i, j);
         cell.setBackground(Color.white);
         cell.setBorder(BorderFactory.createLineBorder(Color.MAGENTA, 5));
-        cell.setPreferredSize(new Dimension(20, 20)); // for demo purposes only
+        cell.setPreferredSize(new Dimension(10, 10)); // for demo purposes only
 
         return cell;
     }

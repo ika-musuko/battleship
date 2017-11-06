@@ -23,18 +23,29 @@ public class Player {
     public void placeShip(int r, int c) {     
         // try to generate a new ship
         Ship ship1 = this.makeShip(r, c);
-        if (ship1 == null) return; // if not a valid place to make a ship
-        
+        if (ship1 == null) {
+            System.out.println("no ship");
+            return; // if not a valid place to make a ship
+        }
+        System.out.println("ship");
         // assign corresponding squares to SHIP
         int[] front = ship1.getFront();
         int[] middle = ship1.getMiddle();
         int[] end = ship1.getEnd();
+        
         this.selfBoard[front[0]][front[1]] = SelfSpace.SHIP;
+        print_coord(front);
         this.selfBoard[middle[0]][middle[1]] = SelfSpace.SHIP;
+        print_coord(middle);
         this.selfBoard[end[0]][end[1]] = SelfSpace.SHIP;
+        print_coord(end);
         
         // push to the current list of ships
         this.ships.add(ship1);
+    }
+    
+    private void print_coord(int[] coord) {
+        System.out.println("COORD row: "+coord[0]+" col: "+coord[1]);
     }
     
     // factory function to make a ship and manage coordinates

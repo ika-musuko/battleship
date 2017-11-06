@@ -58,6 +58,10 @@ public class PlayerScreen extends JFrame {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
     
+    public void update() {
+        
+    }
+    
     public SelfGrid getSelfGrid() {
         return this.selfGrid;
     }

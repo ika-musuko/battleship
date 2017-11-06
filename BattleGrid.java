@@ -29,7 +29,7 @@ public abstract class BattleGrid extends JPanel{
         
         for (int i = 0; i < 10; i++) {
             for(int j = 0; j < 10; j++) {
-                this.context = ccontext;                 
+                             
                 if(withListener) {
                     final Cell cello = this.cells[i][j]; 
                     cello.addMouseListener(new MouseListener() {
@@ -60,12 +60,11 @@ public abstract class BattleGrid extends JPanel{
                         }
                     });
                 }
-
             }
-
         }
         this.updateGrid(isSelf ? ccontext.getActive().getSelfBoard() 
                                : ccontext.getActive().getAttackBoard());
+        this.context = ccontext;    
     }
     
     protected abstract Cell getCell(int i, int j);

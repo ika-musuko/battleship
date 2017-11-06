@@ -123,6 +123,7 @@ public class BattleShipContext {
         // more usable constructor...
         public SetupState(Player activePlayer, Player waitingPlayer, boolean gotoSetup) {
             super(activePlayer, waitingPlayer);
+            System.out.println("
             this.gotoSetup = gotoSetup;
             this.battleString = activePlayer.toString() + " setup";
             this.nextString = gotoSetup ? "next player setup" : "let's battle!";
@@ -132,7 +133,9 @@ public class BattleShipContext {
         public Player handleGrid(int r, int c) {
             // make sure the below function also doesn't add any ships if there are more than 5 ships
             // note that placeShip will rotate a ship if it already exists instead of creating a new one (extra credit points!!!)
+            System.out.println("Setup state handle grid");
             this.activePlayer.placeShip(r, c);
+            System.out.println("total ships: "+this.activePlayer.getTotalShips());
             return this.activePlayer; // return activePlayer to update in context
         }
 

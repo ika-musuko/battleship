@@ -21,8 +21,8 @@ public class SelfGrid extends BattleGrid {
     protected Cell getCell(int i, int j) {
         Cell cell = new Cell(i, j);
         cell.setBackground(Color.black);
-        cell.setBorder(BorderFactory.createLineBorder(Color.blue, 1));
-        cell.setPreferredSize(new Dimension(20, 20)); // for demo purposes only
+        cell.setBorder(BorderFactory.createLineBorder(Color.blue, 10));
+        cell.setPreferredSize(new Dimension(10, 10)); // for demo purposes only
 
         return cell;
     }
