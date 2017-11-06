@@ -4,15 +4,10 @@ import java.awt.event.*;
 import java.io.*;
 import java.net.*;
 
-
 public class BattleShip { 
     public static void main(String[] args) {
-        PlayerScreen player1("player1", true), player2("player2", false); 
-        
-        // default constructor sets the game state to SetupState for player 1
-        BattleShipContext(player1.getPlayerData(), player2.getPlayerData()); 
-        
-        
+        // only one screen will be shown at a time for each player
+        BattleShipContext battleContext = new BattleShipContext(new Player("player 1"), new Player("player 2"));
+        PlayerScreen game(battleContext);
     }
-
 }

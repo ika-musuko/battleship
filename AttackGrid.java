@@ -8,17 +8,17 @@ import java.net.*;
 Represents the other grid
 */
 public class AttackGrid extends BattleGrid {
-    public static final Color UNMARKED_COLOR = Color.BLACK;
-    public static final Color MARKED_COLOR   = Color.GREEN;
+    public static final Color UNMARKED_COLOR  = Color.BLACK;
+    public static final Color MARKED_COLOR    = Color.ORANGE;
+    public static final Color SUCCESS_COLOR   = Color.GREEN;
+    public static final Color FAILURE_COLOR   = Color.RED;
     
-    public AttackGrid(String name) {
-        super();
-        
+    public AttackGrid(BattleShipContext context, boolean withListener, boolean isSelf) {
+        super(context, withListener, isSelf);
     }
 
     @Override
-    protected Cell getCell(int i, int j)
-    {
+    protected Cell getCell(int i, int j){
         Cell cell = new Cell(i, j);
         cell.setBackground(Color.white);
         cell.setBorder(BorderFactory.createLineBorder(Color.MAGENTA, 5));
@@ -33,17 +33,21 @@ public class AttackGrid extends BattleGrid {
         cell.setBackground(Color.GRAY);
     }
     
-    public void updateGrid(AttackSpace[][] attackBoard) {
+    public void updateGrid(int[][] attackBoard) {
         Color currentColor;
         for (int row = 0; row < 10; ++row) {
             for (int column = 0; column < 10; ++column) {
                 AttackSpace spaceStatus = attackBoard[row][column];
                 if(spaceStatus == AttackSpace.MARKED)
-                    currentColor = AttackGrid.MARKED_COLOR;
+                    currentColor = AttackGrid.MARKED_COLOR;                
+                else if(spaceStatus == AttackSpace.SUCCESS)
+                    currentColor = AttackGrid.SUCCESS_COLOR;                
+                else if(spaceStatus == AttackSpace.FAILURE)
+                    currentColor = AttackGrid.FAILURE_COLOR;
                 else 
                     currentColor = AttackGrid.UNMARKED_COLOR;        
             }
-            this.cells[row][column] = currentColor;
+            this.cells[row][column].setBackground(currentColor);
         }            
     }
     

@@ -4,9 +4,9 @@
 //      AttackSpace.MARKED: the player has already tried attacking this square
 //      AttackSpace.SUCCESS: this past attack was a success
 //      AttackSpace.MARKED: this past attack was a failure
-public enum AttackSpace {
-    UNMARKED,
-    MARKED,
-    SUCCESS,
-    FAILURE
+public class AttackSpace {
+    public static final int UNMARKED = 0;
+    public static final int MARKED = 1;
+    public static final int SUCCESS = 2;
+    public static final int FAILURE = 3;
 }

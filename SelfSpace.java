@@ -8,8 +8,8 @@
 
 // set spaces with ships to SelfSpace.SHIP during setup mode
 // set to SelfSpace.DESTROYED if opponent attacks successfully 
-public enum SelfSpace {
-    EMPTY,
-    SHIP,
-    DESTROYED
+public class SelfSpace {
+    public static final int EMPTY = 0;
+    public static final int SHIP = 1;
+    public static final int DESTROYED = 2;
 }

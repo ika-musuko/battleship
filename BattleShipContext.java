@@ -19,6 +19,7 @@ public class BattleShipContext {
         this.currentState = new SetupState(this.activePlayer, this.waitingPlayer, NEXT_SETUP);
     }
 
+    /// CONTEXT PUBLIC INTERFACE METHODS
     // call this method when a grid click is detected and pass in the grid coordinates
     public void gridAction(int r, int c) {
         this.activePlayer = this.currentState.handleGrid(r, c);
@@ -33,11 +34,32 @@ public class BattleShipContext {
         this.activePlayer = this.currentState.getActive();
         this.waitingPlayer = this.currentState.getWaiting();
     }
+    
+    // get the string of the current state
+    public String toString() {
+        return this.currentState.toString();
+    }
+    
+    // get the string of the next button (for clarity)
+    public String nextString() {
+        return this.currentState.nextString();
+    }
+    
+    // use listeners on grid?
+    public boolean selfGridListener() {
+        return this.currentState.selfGridListener();
+    }
+    
+    public boolean attackGridListener() {
+        return this.currentState.attackGridListener();
+    }
 
     private Player activePlayer; // the player with the current turn
     private Player waitingPlayer; // the other player who is waiting for his turn
     private BattleState currentState;
     
+    //////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////
     /// STATE CLASSES
     // I wrote these inside this context class because they're not going to be used outside of this handler 
     // "interface" for a BattleState. this is an abstract class because java doesn't have an elegant way to swap anything via a simple function...(therefore I decided to store the Players as attributes) (educational/funny: https://stackoverflow.com/questions/3624525/how-to-write-a-basic-swap-function-in-java)
@@ -52,9 +74,18 @@ public class BattleShipContext {
         public abstract Player handleGrid(int r, int c);
         // handle the next button
         public abstract BattleState handleNext();
+        
+        // use a listener on grid?
+        public abstract boolean selfGridListener();
+        public abstract boolean attackGridListener();
+                
         // output the state to a String
         public String toString() {
             return this.battleString;
+        }
+        
+        public String nextString() {
+            return this.nextString;
         }
 
         // getters
@@ -69,6 +100,7 @@ public class BattleShipContext {
         protected Player activePlayer;
         protected Player waitingPlayer;
         protected String battleString;
+        protected String nextString;
     }
 
     class SetupState extends BattleState {
@@ -82,6 +114,7 @@ public class BattleShipContext {
             super(activePlayer, waitingPlayer);
             this.gotoSetup = gotoSetup;
             this.battleString = activePlayer.toString() + " setup";
+            this.nextString = gotoSetup ? "next player setup" : "let's battle!";
         }
         
         // place or rotate a ship on activePlayer's board
@@ -102,7 +135,16 @@ public class BattleShipContext {
             this.battleString = activePlayer.toString() + "setup /// please place " + Player.MAX_SHIPS + " on the board."; // notify the player that they have not finished setup
             return this; 
         }
+        
+        // listeners
+        public boolean selfGridListener() {
+            return true;
+        }
 
+        public boolean attackGridListener() {
+            return false;
+        }
+        
         private boolean gotoSetup; // boolean flag to decide where to go upon successful completion of setup
     }
 
@@ -112,6 +154,7 @@ public class BattleShipContext {
             super(activePlayer, waitingPlayer);
             this.battleString = activePlayer.toString() + " attack";
             this.markSet = false;
+            this.nextString = "attack";
         }
 
         public Player handleGrid(int r, int c) {
@@ -140,6 +183,15 @@ public class BattleShipContext {
                 return this;
             }
         }
+        
+        // listeners
+        public boolean selfGridListener() {
+            return false;
+        }
+
+        public boolean attackGridListener() {
+            return true;
+        }
             
         private boolean markSet; // has activePlayer set a mark yet?
     }
@@ -150,6 +202,7 @@ public class BattleShipContext {
         public WinState(Player activePlayer, Player waitingPlayer) {
             super(activePlayer, waitingPlayer);
             this.battleString = activePlayer.toString() + " win!";
+            this.nextString = "game finished";
         }
 
         public Player handleGrid(int r, int c) {
@@ -158,6 +211,15 @@ public class BattleShipContext {
 
         public BattleState handleNext() {
             return this;
+        }
+        
+        // listeners
+        public boolean selfGridListener() {
+            return false;
+        }
+
+        public boolean attackGridListener() {
+            return false;
         }
     } 
 }
