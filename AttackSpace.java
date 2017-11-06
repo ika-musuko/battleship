@@ -5,4 +5,6 @@
 public enum AttackSpace {
     UNMARKED,
     MARKED,
+    SUCCESS,
+    FAILURE
 }
