@@ -13,11 +13,11 @@ public abstract class BattleGrid extends JPanel{
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         JPanel self = new JPanel();
         self.setLayout(new GridLayout(0,10));
-        this.makeCells(self, context, isSelf, withListener);
+        this.makeCells(self, context, isSelf, withListener, this);
         this.add(self);
     }
     
-    protected void makeCells(JPanel self, BattleShipContext context, boolean isSelf, boolean withListener) {
+    protected BattleGrid makeCells(JPanel self, BattleShipContext ccontext, boolean isSelf, boolean withListener, BattleGrid thisAlias) {
         for (int i = 0; i < 10; i++) {
             for(int j = 0; j < 10; j++) {
                 final Cell cell = new Cell(i, j);
@@ -26,9 +26,9 @@ public abstract class BattleGrid extends JPanel{
                 if(withListener) {
                     cell.addMouseListener(new MouseListener() {
                         public void mouseClicked(MouseEvent e) {
-                            context.gridAction(i, j);
-                            this.updateGrid(isSelf ? context.getActive().getSelfBoard() 
-                                                   : context.getActive().getAttackBoard());
+                            ccontext.gridAction(cell.getRow(), cell.getRow());
+                            thisAlias.updateGrid(isSelf ? ccontext.getActive().getSelfBoard() 
+                                                   : ccontext.getActive().getAttackBoard());
                             
                         }
                         // other mouse listener functions
@@ -55,7 +55,8 @@ public abstract class BattleGrid extends JPanel{
                     });
                 }
             }
-        }        
+        }
+        return thisAlias;
     }
     
     protected abstract Cell getCell(int i, int j);

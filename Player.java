@@ -103,7 +103,7 @@ public class Player {
         // SUCCESSFUL ATTACK CASE
         if (other.selfBoard[this.currentMarkR][this.currentMarkC] == SelfSpace.SHIP) {
             int[] attacked = {this.currentMarkR, this.currentMarkC};
-            Ship damagedShip;
+            Ship damagedShip = null;
             int i = 0;
             for (; i < this.ships.size(); ++i) {
                 int[] front =  this.ships.get(i).getFront();
@@ -123,7 +123,7 @@ public class Player {
                 }
             }
             
-            if (i < this.ships.size()) {
+            if (damagedShip != null) {
                 damagedShip.reduceHealth();
                 if(damagedShip.isDead())
                     this.ships.remove(i);
