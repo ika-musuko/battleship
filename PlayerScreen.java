@@ -49,16 +49,12 @@ public class PlayerScreen extends JFrame {
         // update the state
         this.context.nextAction();
         
-        // get the active player
+        // write to grid
         Player activePlayer = this.context.getActive();
-        
-        // reflect the active player's data on the grids
-        this.selfGrid.updateGrid(activePlayer.getSelfBoard());
-        this.selfGrid.updateGrid(activePlayer.getSelfBoard());
-        
-        // update the status
+        this.selfGrid.updateGrid(activePlayer.getSelfBoard());  
+        this.attackGrid.updateGrid(activePlayer.getAttackBoard());  
+        this.status.update(context);
         this.activeName.setText(activePlayer.toString());
-        this.status.update(this.context);
     }
 
     public void hideScreen() {

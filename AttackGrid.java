@@ -19,7 +19,6 @@ public class AttackGrid extends BattleGrid {
     }
 
     @Override
-    
     protected Cell getCell(int i, int j){
         Cell cell = new Cell(i, j, Color.BLACK, Color.MAGENTA, 5, 20);
 /*         cell.setBackground(Color.BLACK);
@@ -33,10 +32,10 @@ public class AttackGrid extends BattleGrid {
     public void click(MouseEvent e, Cell cell) {
         // handle the event
         System.out.println(cell.toString());
+        this.context.gridAction(cell.getRow(), cell.getColumn());
         Player activePlayer = this.context.getActive();
         this.updateGrid(activePlayer.getAttackBoard());
         this.status.update(context);
-        //cell.setBackground(Color.GRAY);
     }
     
     public void updateGrid(int[][] attackBoard) {
@@ -55,6 +54,5 @@ public class AttackGrid extends BattleGrid {
                 this.cells[row][column].changeColor(currentColor);
             }     
         }            
-    }
-    
+    }  
 }
