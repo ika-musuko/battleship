@@ -19,6 +19,25 @@ public class Ship
     	this.end[1] = end[1];
     }
 	
+    public void rotateShip()
+    {
+    	// Horizontal to Vertical
+    	if(this.front[0] == this.middle[0])  // check if ship is positioned along the row (oriented horizontally)
+    	{
+    		this.front[0]++;  				 // increment to vertical row coordinate
+    		this.front[1] = this.middle[1];  // revert to middle col coordinate
+    		this.end[0]--;    				 // decrement to vertical row coordinate
+    		this.end[1] = this.middle[1];    // revert to middle col coordinate
+    	}
+    	else // Vertical to Horizontal
+    	{
+    		this.front[0] = this.middle[0];  // increment to vertical row coordinate
+    		this.front[1]++; 				 // revert to middle col coordinate
+    		this.end[0] = this.middle[0];	 // decrement to vertical row coordinate
+    		this.end[1]--;				     // revert to middle col coordinate
+    	}
+    }
+    
     public int [] getFront()
     {
     	return front;

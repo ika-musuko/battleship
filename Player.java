@@ -9,7 +9,7 @@ public class Player {
         this.name = name;
         this.currentMarkR = -1;
         this.currentMarkC = -1;
-        this.ships = new ArrayList<>();
+        this.shipList = new ArrayList<>();
         this.attackBoard = new int[boardSize][boardSize];
         this.selfBoard = new int[boardSize][boardSize];
         this.sunkenShips = 0;
@@ -41,7 +41,7 @@ public class Player {
         print_coord(end);
         
         // push to the current list of ships
-        this.ships.add(ship1);
+        this.shipList.add(ship1);
     }
     
     private void print_coord(int[] coord) {
@@ -50,28 +50,32 @@ public class Player {
     
     // factory function to make a ship and manage coordinates
     private Ship makeShip(int row, int col) {
-        // corners can't have ships
+    	
+    	// coordinates of center of new ship
+    	int[] middle = {row, col};
+    	
+        // EDGE CASE 1: middle of a ship positioned in a corner results in invalid positioning
         if ((row == 0 || row == Player.DEFAULT_BOARD_SIZE-1) && (col == 0 || col == Player.DEFAULT_BOARD_SIZE-1))
             return null;
-        
-        int[] middle = {row, col};
-        
-        // exists
+      
+        // Check if the middle coordinate is on an existing cell on the board
         if (this.selfBoard[middle[0]][middle[1]] != SelfSpace.EMPTY) {
             return null;
         }
         
+        // Default initialize the front and end cell of the ship to orient horizontally
         int[] front = {row+1, col};
         int[] end = {row-1, col}; 
         
+        // EDGE CASE 2: ship front or end coordinates are out of bounds (happens if middle touching board edge)
         if (row-1 < 0 || row+1 >= Player.DEFAULT_BOARD_SIZE) {
-            front[0] = row;
-            front[1] = col+1;
-            end[0] = row; 
-            end[1] = col-1; 
+            front[0] = row;   // revert to middle row coordinate
+            front[1] = col+1; // change to horizontal orientation coordinate
+            end[0] = row;     // revert to middle row coordinate
+            end[1] = col-1;   // change to horizontal orientation coordinate
         }
         
-        // exists
+        // Check if either front or end coordinates are on an existing cell on the board
         if (this.selfBoard[front[0]][front[1]] != SelfSpace.EMPTY || this.selfBoard[end[0]][end[1]] != SelfSpace.EMPTY) {
             return null;
         }
@@ -81,7 +85,7 @@ public class Player {
     
     // return the total amount of ships
     public int getTotalShips() {
-        return this.ships.size();
+        return this.shipList.size();
     }
     
     // return true if there are no ships
@@ -91,6 +95,7 @@ public class Player {
     
     // set a mark to attack on
     public Player setMark(int r, int c) {
+    	// Check if mark coordinates are pointing to a cell that has already been attacked
         if (this.attackBoard[r][c] != AttackSpace.UNMARKED) 
             return null;
         
@@ -116,29 +121,32 @@ public class Player {
         if (other.selfBoard[this.currentMarkR][this.currentMarkC] == SelfSpace.SHIP) {
             int[] attacked = {this.currentMarkR, this.currentMarkC};
             Ship damagedShip = null;
+            // Check every possible ship's coordinate to see if there was a hit
+            // If found, set damagedShip to that specific ship
             int i = 0;
-            for (; i < this.ships.size(); ++i) {
-                int[] front =  this.ships.get(i).getFront();
+            for (; i < this.shipList.size(); ++i) {
+                int[] front =  this.shipList.get(i).getFront();
                 if(this.checkCoords(front, attacked)){
-                    damagedShip = this.ships.get(i);
+                    damagedShip = this.shipList.get(i);
                     break;
                 }
-                int[] middle =  this.ships.get(i).getMiddle();
+                int[] middle =  this.shipList.get(i).getMiddle();
                 if(this.checkCoords(middle, attacked)){
-                    damagedShip =  this.ships.get(i);
+                    damagedShip =  this.shipList.get(i);
                     break;
                 }
-                int[] end =  this.ships.get(i).getEnd();
+                int[] end =  this.shipList.get(i).getEnd();
                 if(this.checkCoords(end, attacked)){
-                    damagedShip =  this.ships.get(i);
+                    damagedShip =  this.shipList.get(i);
                     break;
                 }
             }
             
+            // If attack was successful, damagedShip will have been set to an existing Ship
             if (damagedShip != null) {
                 damagedShip.reduceHealth();
                 if(damagedShip.isDead())
-                    this.ships.remove(i);
+                    this.shipList.remove(i);
 
                 this.attackBoard[this.currentMarkR][this.currentMarkC] = AttackSpace.SUCCESS; // this code will confirm that the attack was a success!
                 
@@ -159,7 +167,7 @@ public class Player {
         // reinitialize currentMarks
         this.currentMarkR = -1;
         this.currentMarkC = -1;     
-        // return the other platyer
+        // return the other player
         return other;
     }
     
@@ -194,7 +202,7 @@ public class Player {
     private int sunkenShips;
     private int currentMarkR;
     private int currentMarkC;
-    private ArrayList<Ship> ships;
+    private ArrayList<Ship> shipList;
     private int[][] attackBoard; // place marks on this board (AttackSpace is just an enum)
     private int[][] selfBoard; // place ships / monitor ship progress on this board (SelfSpace is just an enum)
 }
