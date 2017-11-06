@@ -50,8 +50,19 @@ public class Player {
     
     // attack the other player on the current mark
     public Player attack(Player other) {
+        // SUCCESSFUL ATTACK CASE
         if (other.selfBoard[this.currentMarkR][this.currentMarkC] == SelfSpace.SHIP) {
-            // todo: attack ship and verify if the ship has been sunk (maybe make a Ship class?)
+            ////////////////////////////
+            // ANDREW! put your code for handling the ship hit over here!
+            ////////////////////////////
+            
+            // now splice in the following code! to (SHERWYN might do this himself)
+            this.attackBoard[this.currentMarkR][this.currentMarkC] = AttackSpace.SUCCESS; // this code will confirm that the attack was a success!
+        }
+       
+       // FAILURE ATTACK CASE
+        else {
+            this.attackBoard[this.currentMarkR][this.currentMarkC] = AttackSpace.FAILURE; 
         }
         
         // reinitialize currentMarks
