@@ -8,14 +8,15 @@ public abstract class BattleGrid extends JPanel{
     protected Cell[][] cells;
     
     public BattleGrid() {
-        this.cells = new 
+        this.cells = new Cell[10][10];
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         JPanel self = new JPanel();
         self.setLayout(new GridLayout(0,10));
         for (int i = 0; i < 10; i++)
             for(int j =0; j < 10; j++) {
                 final Cell cell = new Cell(i, j);
-                self.add(cell);
+                this.cells[i][j] = cell; // add to the cells 2d array
+                self.add(cell); // add to JPanel
                 cell.addMouseListener(new MouseListener()) {
                     public void mouseClicked(MouseEvent e) {
                         click(e, cell);
@@ -57,5 +58,5 @@ public abstract class BattleGrid extends JPanel{
         // handle the event, for instance
         //cell.setBackground(Color.GRAY);
     }
-    
+
 }

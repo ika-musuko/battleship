@@ -8,6 +8,9 @@ import java.net.*;
 Represents the other grid
 */
 public class AttackGrid extends BattleGrid {
+    public static final Color UNMARKED_COLOR = Color.BLACK;
+    public static final Color MARKED_COLOR   = Color.GREEN;
+    
     public AttackGrid(String name) {
         super();
         
@@ -29,4 +32,19 @@ public class AttackGrid extends BattleGrid {
         // handle the event, for instance
         cell.setBackground(Color.GRAY);
     }
+    
+    public void updateGrid(AttackSpace[][] attackBoard) {
+        Color currentColor;
+        for (int row = 0; row < 10; ++row) {
+            for (int column = 0; column < 10; ++column) {
+                AttackSpace spaceStatus = attackBoard[row][column];
+                if(spaceStatus == AttackSpace.MARKED)
+                    currentColor = AttackGrid.MARKED_COLOR;
+                else 
+                    currentColor = AttackGrid.UNMARKED_COLOR;        
+            }
+            this.cells[row][column] = currentColor;
+        }            
+    }
+    
 }
