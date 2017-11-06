@@ -7,7 +7,7 @@ public class Player {
         this.name = name;
         this.currentMarkR = -1;
         this.currentMarkC = -1;
-        this.totalShips = 0;
+        this.ships = new ArrayList<>();
         this.attackBoard = new AttackSpace[boardSize][boardSize];
         this.selfBoard = new SelfSpace[boardSize][boardSize];
     }
@@ -17,23 +17,67 @@ public class Player {
     }
     
     // place or rotate a ship
-    public void placeShip(int r, int c) {
+    public void placeShip(int r, int c) {     
+        // try to generate a new ship
+        Ship ship1 = this.makeShip(r, c);
+        if (ship1 == null) return; // if not a valid place to make a ship
         
+        // assign corresponding squares to SHIP
+        int[] front = ship1.getFront();
+        int[] middle = ship1.getMiddle();
+        int[] end = ship1.getEnd();
+        this.selfBoard[front[0]][front[1]] = SelfSpace.SHIP;
+        this.selfBoard[middle[0]][middle[1]] = SelfSpace.SHIP;
+        this.selfBoard[end[0]][end[1]] = SelfSpace.SHIP;
+        
+        // push to the current list of ships
+        this.ships.add(ship1);
+    }
+    
+    // factory function to make a ship and manage coordinates
+    private Ship makeShip(int row, int col) {
+        // corners can't have ships
+        if ((row == 0 || row == Player.DEFAULT_BOARD_SIZE-1) && (col == 0 || col == Player.DEFAULT_BOARD_SIZE-1))
+            return null;
+        
+        int[] middle = {row, col};
+        
+        // exists
+        if (this.selfBoard(middle[0], middle[1]) != SelfSpace.EMPTY) {
+            return null;
+        }
+        
+        if (row-1 < 0 || row+1 >= Player.DEFAULT_BOARD_SIZE) {
+            int[] front = {row, col+1};
+            int[] end = {row, col-1}; 
+        }
+        
+        else {
+            int[] front = {row+1, col};
+            int[] end = {row-1, col}; 
+        }
+        
+        // exists
+        if (this.selfBoard(front[0], front[1]) != SelfSpace.EMPTY || this.selfBoard(end[0], end[1]) != SelfSpace.EMPTY) {
+            return null;
+        }
+        
+        return new Ship(front, middle, end);
     }
     
     // return the total amount of ships
     public int getTotalShips() {
-        return this.totalShips;
+        return this.ships.size();
     }
     
     // return true if there are no ships
     public boolean noShips() {
-        return this.totalShips == 0;
+        return this.getTotalShips() == 0;
     }
     
     // set a mark to attack on
     public Player setMark(int r, int c) {
-        if (this.attackBoard[r][c] ==  AttackSpace.MARKED) 
+        if (this.attackBoard[r][c] != AttackSpace.UNMARKED) 
             return null;
         
         // remove old mark if it exists
@@ -48,16 +92,48 @@ public class Player {
         return this;
     }
     
+    private boolean checkCoords(int[] coord1, int[] coord2) {
+        return (coord1[0] == coord2[0] && coord1[1] == coord2[1]);
+    }
+    
     // attack the other player on the current mark
     public Player attack(Player other) {
         // SUCCESSFUL ATTACK CASE
         if (other.selfBoard[this.currentMarkR][this.currentMarkC] == SelfSpace.SHIP) {
-            ////////////////////////////
-            // ANDREW! put your code for handling the ship hit over here!
-            ////////////////////////////
+            int[] attacked = {this.currentMarkR, this.currentMarkC};
+            Ship damagedShip;
+            int i = 0;
+            for (; i < this.ships.size(); ++i) {
+                int[] front = ship1.getFront();
+                if(this.checkCoords(front, attacked)){
+                    damagedShip = ship1;
+                    break;
+                }
+                int[] middle = ship1.getMiddle();
+                if(this.checkCoords(middle, attacked)){
+                    damagedShip = ship1;
+                    break;
+                }
+                int[] end = ship1.getEnd();
+                if(this.checkCoords(end, attacked)){
+                    damagedShip = ship1;
+                    break;
+                }
+            }
             
-            // now splice in the following code! to (SHERWYN might do this himself)
-            this.attackBoard[this.currentMarkR][this.currentMarkC] = AttackSpace.SUCCESS; // this code will confirm that the attack was a success!
+            if (i < this.ships.size()) {
+                damagedShip.reduceHealth();
+                if(damagedShip.isDead()) {
+                    this.ships.remove(i);
+
+                this.attackBoard[this.currentMarkR][this.currentMarkC] = AttackSpace.SUCCESS; // this code will confirm that the attack was a success!
+                
+                other.selfBoard[this.currentMarkR][this.currentMarkC] == SelfSpace.DESTROYED;
+            }
+            // failsafe
+            else {
+                this.attackBoard[this.currentMarkR][this.currentMarkC] = AttackSpace.FAILURE; 
+            }
         }
        
        // FAILURE ATTACK CASE
@@ -72,6 +148,7 @@ public class Player {
         return other;
     }
     
+    
     /// functions to return useful information for display
     // return the player's name
     public String toString() {
@@ -79,19 +156,19 @@ public class Player {
     }
     
     // return the attackBoard
-    public AttackSpace[][] getAttackBoard() {
+    public int[][] getAttackBoard() {
         return this.attackBoard;
     }
     
     // return the selfBoard
-     public SelfSpace[][] getSelfBoard() {
+     public int[][] getSelfBoard() {
         return this.selfBoard;
     }
     
     private String name;
     private int currentMarkR;
     private int currentMarkC;
-    private int totalShips;
-    private AttackSpace[][] attackBoard; // place marks on this board (AttackSpace is just an enum)
-    private SelfSpace[][] selfBoard; // place ships / monitor ship progress on this board (SelfSpace is just an enum)
+    private ArrayList<Ship> ships;
+    private int[][] attackBoard; // place marks on this board (AttackSpace is just an enum)
+    private int[][] selfBoard; // place ships / monitor ship progress on this board (SelfSpace is just an enum)
 }
