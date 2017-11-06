@@ -19,13 +19,23 @@ public abstract class BattleGrid extends JPanel{
     
     protected void makeCells(JPanel self, BattleShipContext ccontext, boolean isSelf, boolean withListener) {
         for (int i = 0; i < 10; i++) {
-            for(int j = 0; j < 10; j++) {
+            for(int j = 0; j < 10; j++) {  
                 final Cell cell = new Cell(i, j); 
                 self.add(cell); // add to JPanel
+                this.cells[i][j] = cell; // add to the cells 2d array
+
+            }
+        }      
+        
+        for (int i = 0; i < 10; i++) {
+            for(int j = 0; j < 10; j++) {
+                this.context = ccontext;                 
                 if(withListener) {
-                    cell.addMouseListener(new MouseListener() {
+                    final Cell cello = this.cells[i][j]; 
+                    cello.addMouseListener(new MouseListener() {
                         public void mouseClicked(MouseEvent e) {
-                            ccontext.gridAction(cell.getRow(), cell.getRow());
+                            ccontext.gridAction(cello.getRow(), cello.getColumn());
+
                         }
                         // other mouse listener functions
 
@@ -50,12 +60,12 @@ public abstract class BattleGrid extends JPanel{
                         }
                     });
                 }
-                this.updateGrid(isSelf ? ccontext.getActive().getSelfBoard() 
-                       : ccontext.getActive().getAttackBoard());
-                this.context = ccontext;   
-                this.cells[i][j] = cell; // add to the cells 2d array
+
             }
+
         }
+        this.updateGrid(isSelf ? ccontext.getActive().getSelfBoard() 
+                               : ccontext.getActive().getAttackBoard());
     }
     
     protected abstract Cell getCell(int i, int j);

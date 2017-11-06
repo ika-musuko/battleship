@@ -45,7 +45,8 @@ public class SelfGrid extends BattleGrid {
                 else if(spaceStatus == SelfSpace.SHIP)
                     currentColor = SelfGrid.SHIP_COLOR;
                 else 
-                    currentColor = SelfGrid.DESTROYED_COLOR;   
+                    currentColor = SelfGrid.DESTROYED_COLOR; 
+                System.out.println("row: "+row+" column: "+column);
                 this.cells[row][column].setBackground(currentColor);
             }
         }            
