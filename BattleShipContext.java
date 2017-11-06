@@ -23,6 +23,7 @@ public class BattleShipContext {
     // call this method when a grid click is detected and pass in the grid coordinates
     public void gridAction(int r, int c) {
         this.activePlayer = this.currentState.handleGrid(r, c);
+        System.out.println("grid action"+r+" "+c);
     }
 
     // call this method when a click on the next button is detected
@@ -33,6 +34,8 @@ public class BattleShipContext {
         // update the current active and waiting Players
         this.activePlayer = this.currentState.getActive();
         this.waitingPlayer = this.currentState.getWaiting();
+        
+        System.out.println("next action");
     }
     
     // get the string of the current state
