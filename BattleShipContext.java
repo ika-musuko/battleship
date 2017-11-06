@@ -54,6 +54,14 @@ public class BattleShipContext {
         return this.currentState.attackGridListener();
     }
 
+    public Player getActive() {
+        return this.activePlayer;
+    }
+
+    public Player getWaiting() {
+        return this.waitingPlayer;
+    }
+    
     private Player activePlayer; // the player with the current turn
     private Player waitingPlayer; // the other player who is waiting for his turn
     private BattleState currentState;

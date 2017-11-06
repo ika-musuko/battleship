@@ -37,7 +37,7 @@ public class AttackGrid extends BattleGrid {
         Color currentColor;
         for (int row = 0; row < 10; ++row) {
             for (int column = 0; column < 10; ++column) {
-                AttackSpace spaceStatus = attackBoard[row][column];
+                int spaceStatus = attackBoard[row][column];
                 if(spaceStatus == AttackSpace.MARKED)
                     currentColor = AttackGrid.MARKED_COLOR;                
                 else if(spaceStatus == AttackSpace.SUCCESS)
@@ -45,9 +45,9 @@ public class AttackGrid extends BattleGrid {
                 else if(spaceStatus == AttackSpace.FAILURE)
                     currentColor = AttackGrid.FAILURE_COLOR;
                 else 
-                    currentColor = AttackGrid.UNMARKED_COLOR;        
-            }
-            this.cells[row][column].setBackground(currentColor);
+                    currentColor = AttackGrid.UNMARKED_COLOR; 
+                this.cells[row][column].setBackground(currentColor);
+            }     
         }            
     }
     

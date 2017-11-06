@@ -35,12 +35,11 @@ public class SelfGrid extends BattleGrid {
     }
     
     // enum types having strict type checking in java makes me write the same method in two related classes twice : ( 
-    public void updateGrid(int][] selfBoard) {
+    public void updateGrid(int[][] selfBoard) {
         Color currentColor;
         for (int row = 0; row < 10; ++row) {
             for (int column = 0; column < 10; ++column) {
-                SelfSpace spaceStatus = selfBoard[row][column];
-                // inelegant sorry : ( (hey if this was python i would just make a dict mapping SelfSpaces to Colors and do a blazingly fast lookup (since python dicts are implemented in C https://github.com/python/cpython/blob/master/Objects/dictobject.c))
+                int spaceStatus = selfBoard[row][column];
                 if(spaceStatus == SelfSpace.EMPTY)
                     currentColor = SelfGrid.EMPTY_COLOR;
                 else if(spaceStatus == SelfSpace.SHIP)

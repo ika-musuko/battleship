@@ -1,3 +1,5 @@
+import java.util.*;
+
 public class Player {
     public static final int MAX_SHIPS = 5;
     public static final int DEFAULT_BOARD_SIZE = 10;
@@ -8,8 +10,8 @@ public class Player {
         this.currentMarkR = -1;
         this.currentMarkC = -1;
         this.ships = new ArrayList<>();
-        this.attackBoard = new AttackSpace[boardSize][boardSize];
-        this.selfBoard = new SelfSpace[boardSize][boardSize];
+        this.attackBoard = new int[boardSize][boardSize];
+        this.selfBoard = new int[boardSize][boardSize];
     }
     
     public Player(String name) {
@@ -43,22 +45,22 @@ public class Player {
         int[] middle = {row, col};
         
         // exists
-        if (this.selfBoard(middle[0], middle[1]) != SelfSpace.EMPTY) {
+        if (this.selfBoard[middle[0]][middle[1]] != SelfSpace.EMPTY) {
             return null;
         }
         
-        if (row-1 < 0 || row+1 >= Player.DEFAULT_BOARD_SIZE) {
-            int[] front = {row, col+1};
-            int[] end = {row, col-1}; 
-        }
+        int[] front = {row+1, col};
+        int[] end = {row-1, col}; 
         
-        else {
-            int[] front = {row+1, col};
-            int[] end = {row-1, col}; 
+        if (row-1 < 0 || row+1 >= Player.DEFAULT_BOARD_SIZE) {
+            front[0] = row;
+            front[1] = col+1;
+            end[0] = row; 
+            end[1] = col-1; 
         }
         
         // exists
-        if (this.selfBoard(front[0], front[1]) != SelfSpace.EMPTY || this.selfBoard(end[0], end[1]) != SelfSpace.EMPTY) {
+        if (this.selfBoard[front[0]][front[1]] != SelfSpace.EMPTY || this.selfBoard[end[0]][end[1]] != SelfSpace.EMPTY) {
             return null;
         }
         
@@ -104,31 +106,31 @@ public class Player {
             Ship damagedShip;
             int i = 0;
             for (; i < this.ships.size(); ++i) {
-                int[] front = ship1.getFront();
+                int[] front =  this.ships.get(i).getFront();
                 if(this.checkCoords(front, attacked)){
-                    damagedShip = ship1;
+                    damagedShip = this.ships.get(i);
                     break;
                 }
-                int[] middle = ship1.getMiddle();
+                int[] middle =  this.ships.get(i).getMiddle();
                 if(this.checkCoords(middle, attacked)){
-                    damagedShip = ship1;
+                    damagedShip =  this.ships.get(i);
                     break;
                 }
-                int[] end = ship1.getEnd();
+                int[] end =  this.ships.get(i).getEnd();
                 if(this.checkCoords(end, attacked)){
-                    damagedShip = ship1;
+                    damagedShip =  this.ships.get(i);
                     break;
                 }
             }
             
             if (i < this.ships.size()) {
                 damagedShip.reduceHealth();
-                if(damagedShip.isDead()) {
+                if(damagedShip.isDead())
                     this.ships.remove(i);
 
                 this.attackBoard[this.currentMarkR][this.currentMarkC] = AttackSpace.SUCCESS; // this code will confirm that the attack was a success!
                 
-                other.selfBoard[this.currentMarkR][this.currentMarkC] == SelfSpace.DESTROYED;
+                other.selfBoard[this.currentMarkR][this.currentMarkC] = SelfSpace.DESTROYED;
             }
             // failsafe
             else {

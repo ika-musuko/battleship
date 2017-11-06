@@ -11,9 +11,9 @@ public class StatusPanel extends JPanel {
         JLabel enemyShipsSunkLabel = new JLabel("Enemy Ships Sunk: "+enemyShipsSunk);
         JLabel currentStateLabel   = new JLabel("Current Game State: "+currentState);
         
-        this.add(ownShipsLabel)      
-        this.add(ownShipsSunkLabel)  
-        this.add(enemyShipsSunkLabel)
-        this.add(currentStateLabel)        
+        this.add(ownShipsLabel);      
+        this.add(ownShipsSunkLabel);  
+        this.add(enemyShipsSunkLabel);
+        this.add(currentStateLabel);        
     }
 }

@@ -27,9 +27,9 @@ public class PlayerScreen extends JFrame {
         Number of own ships sunk:
         Number of enemy ships sunk:
         Current state (Can be one of player1 setup, player2 setup, player1 attack, player2 attack, Game over (result) ) */
-        int ownShips = active.totalShips();
+        int ownShips = active.getTotalShips();
         int ownShipsSunk = Player.MAX_SHIPS - ownShips;
-        int enemyShipsSunk = Player.MAX_SHIPS - context.waiting().totalShips();
+        int enemyShipsSunk = Player.MAX_SHIPS - waiting.getTotalShips();
         String currentState = context.toString();
         // StatusPanel is a custom class extending JPanel which will store all the status data
         this.status = new StatusPanel(ownShips, ownShipsSunk, enemyShipsSunk, currentState);
@@ -54,7 +54,7 @@ public class PlayerScreen extends JFrame {
         this.pack();
         
         // pop up on the screen
-        this.setVisible(show);
+        this.setVisible(true);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
     
@@ -62,16 +62,11 @@ public class PlayerScreen extends JFrame {
         return this.selfGrid;
     }
 
-    public SelfGrid getAttackGrid() {
+    public AttackGrid getAttackGrid() {
         return this.attackGrid;
     }    
  
     public void hideScreen() {
         this.setVisible(false);
-    }
-    
-    // gets the player data!
-    public Player getPlayerData() {
-        return this.data;
     }
 }
