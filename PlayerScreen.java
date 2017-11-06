@@ -9,6 +9,7 @@ public class PlayerScreen extends JFrame {
     private SelfGrid selfGrid;
     private AttackGrid attackGrid;
     private StatusPanel status;
+    private JLabel activeName;
     
     public PlayerScreen(BattleShipContext context) {
         // set the global layout
@@ -18,15 +19,17 @@ public class PlayerScreen extends JFrame {
         // initialize the context and use the context to update the grids
         this.context = context;
         Player activePlayer = this.context.getActive();
-        this.selfGrid = new SelfGrid(this.context);
-        this.attackGrid = new AttackGrid(this.context);
+        this.activeName = new JLabel(activePlayer.toString());
         this.status = new StatusPanel(this.context);
+        this.selfGrid = new SelfGrid(this.context, this.status);
+        this.attackGrid = new AttackGrid(this.context, this.status);
+        
         
         // write to the GUI
         this.add(this.selfGrid, BorderLayout.EAST);
         this.add(this.attackGrid, BorderLayout.WEST);
         this.add(this.status, BorderLayout.SOUTH);
-        this.add(new JLabel(this.context.toString()), BorderLayout.NORTH);
+        this.add(this.activeName, BorderLayout.NORTH);
         JButton next = new JButton("next");
         next.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -54,6 +57,7 @@ public class PlayerScreen extends JFrame {
         this.selfGrid.updateGrid(activePlayer.getSelfBoard());
         
         // update the status
+        this.activeName.setText(activePlayer.toString());
         this.status.update(this.context);
     }
 

@@ -7,9 +7,11 @@ import java.net.*;
 public abstract class BattleGrid extends JPanel{
     protected BattleShipContext context;
     protected Cell[][] cells;
+    protected StatusPanel status;
     
-    public BattleGrid(BattleShipContext context) {
+    public BattleGrid(BattleShipContext context, StatusPanel status) {
         this.context = context;
+        this.status = status;
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         JPanel self = new JPanel();
         self.setLayout(new GridLayout(0,10));

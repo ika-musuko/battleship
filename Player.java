@@ -20,7 +20,11 @@ public class Player {
     }
     
     // place or rotate a ship
-    public void placeShip(int r, int c) {     
+    public void placeShip(int r, int c) {  
+        // too many ships!
+        if (this.shipList.size() >= Player.MAX_SHIPS) {
+            return;
+        }
         // try to generate a new ship
         Ship ship1 = this.makeShip(r, c);
         if (ship1 == null) {

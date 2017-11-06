@@ -13,8 +13,8 @@ public class SelfGrid extends BattleGrid {
     public static final Color SHIP_COLOR = Color.GRAY;
     public static final Color DESTROYED_COLOR = Color.RED;
     
-    public SelfGrid(BattleShipContext context) {
-        super(context);
+    public SelfGrid(BattleShipContext context, StatusPanel status) {
+        super(context, status);
         this.updateGrid(context.getActive().getSelfBoard());
     }
     
@@ -35,6 +35,7 @@ public class SelfGrid extends BattleGrid {
         Player activePlayer = this.context.getActive();
         this.updateGrid(activePlayer.getSelfBoard());
         System.out.println(cell.toString());
+        this.status.update(context);
     }
     
     public void updateGrid(int[][] selfBoard) {

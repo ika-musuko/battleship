@@ -1,3 +1,4 @@
+import javax.swing.*;
 public class BattleShipContext {
     /// STATE HANDLER FOR THE GAME
     // this class should seamlessly interface with any type of front end
@@ -141,12 +142,14 @@ public class BattleShipContext {
 
         // go to the next player's setup state or if all players have finished setting up, begin game with the first player 
         public BattleState handleNext() {
-            if(this.activePlayer.getTotalShips() < Player.MAX_SHIPS) {
-                return this.gotoSetup ? new SetupState(this.waitingPlayer, this.activePlayer, false) 
-                                      : new AttackState(this.waitingPlayer, this.activePlayer);
+            if(this.activePlayer.getTotalShips() >= Player.MAX_SHIPS) {
+                if(this.gotoSetup) 
+                    return new SetupState(this.waitingPlayer, this.activePlayer, false);
+                JOptionPane.showMessageDialog(null, "time to attack!");
+                return new AttackState(this.waitingPlayer, this.activePlayer);
             }
             // if the player has not finished setting up ships, do not change the state
-            this.battleString = activePlayer.toString() + "setup /// please place " + Player.MAX_SHIPS + " on the board."; // notify the player that they have not finished setup
+            this.battleString = this.activePlayer.toString() + " setup \nplease place " + (Player.MAX_SHIPS-this.activePlayer.getTotalShips()) + " more ships on the board."; // notify the player that they have not finished setup
             return this; 
         }
         
@@ -193,7 +196,7 @@ public class BattleShipContext {
             
             // else do not change the state
             else {
-                this.battleString = activePlayer.toString() + " attack // please mark a valid square to attack";
+                this.battleString = activePlayer.toString() + " attack \nplease mark a valid square to attack";
                 return this;
             }
         }

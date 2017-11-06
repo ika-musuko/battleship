@@ -13,8 +13,8 @@ public class AttackGrid extends BattleGrid {
     public static final Color SUCCESS_COLOR   = Color.GREEN;
     public static final Color FAILURE_COLOR   = Color.RED;
     
-    public AttackGrid(BattleShipContext context) {
-        super(context);
+    public AttackGrid(BattleShipContext context, StatusPanel status) {
+        super(context, status);
         this.updateGrid(context.getActive().getAttackBoard());
     }
 
@@ -32,8 +32,10 @@ public class AttackGrid extends BattleGrid {
     @Override 
     public void click(MouseEvent e, Cell cell) {
         // handle the event
+        System.out.println(cell.toString());
         Player activePlayer = this.context.getActive();
-        this.updateGrid(activePlayer.getSelfBoard());
+        this.updateGrid(activePlayer.getAttackBoard());
+        this.status.update(context);
         //cell.setBackground(Color.GRAY);
     }
     
