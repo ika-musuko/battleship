@@ -31,10 +31,10 @@ public class SelfGrid extends BattleGrid {
     public void click(MouseEvent e, Cell cell) {
         // handle the event, for instance
         // handle the event
-        if(this.context == null) System.out.println("context nullo!!!!!");
+        this.context.gridAction(cell.getRow(), cell.getColumn());
         Player activePlayer = this.context.getActive();
-        if(activePlayer == null) System.out.println("player nullo!!!!!");
         this.updateGrid(activePlayer.getSelfBoard());
+        System.out.println(cell.toString());
     }
     
     public void updateGrid(int[][] selfBoard) {

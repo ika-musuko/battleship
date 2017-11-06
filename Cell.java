@@ -32,4 +32,8 @@ public class Cell extends JPanel{
     public int getColumn(){
         return this.cPos;
     }
+    
+    public String toString() {
+        return getRow()+" "+getColumn();
+    }
 }

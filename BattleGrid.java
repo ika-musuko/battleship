@@ -9,6 +9,7 @@ public abstract class BattleGrid extends JPanel{
     protected Cell[][] cells;
     
     public BattleGrid(BattleShipContext context) {
+        this.context = context;
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         JPanel self = new JPanel();
         self.setLayout(new GridLayout(0,10));
