@@ -12,6 +12,7 @@ public class Player {
         this.ships = new ArrayList<>();
         this.attackBoard = new int[boardSize][boardSize];
         this.selfBoard = new int[boardSize][boardSize];
+        this.sunkenShips = 0;
     }
     
     public Player(String name) {
@@ -131,6 +132,7 @@ public class Player {
                 this.attackBoard[this.currentMarkR][this.currentMarkC] = AttackSpace.SUCCESS; // this code will confirm that the attack was a success!
                 
                 other.selfBoard[this.currentMarkR][this.currentMarkC] = SelfSpace.DESTROYED;
+                other.sinkShip();
             }
             // failsafe
             else {
@@ -163,11 +165,22 @@ public class Player {
     }
     
     // return the selfBoard
-     public int[][] getSelfBoard() {
+    public int[][] getSelfBoard() {
         return this.selfBoard;
     }
     
+    // return sunk ships
+    public int getSunkenShips() {
+        return this.sunkenShips;
+    }
+    
+    // sink a ship
+    private void sinkShip() {
+        ++this.sunkenShips;
+    }
+    
     private String name;
+    private int sunkenShips;
     private int currentMarkR;
     private int currentMarkC;
     private ArrayList<Ship> ships;
