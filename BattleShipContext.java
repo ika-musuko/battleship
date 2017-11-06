@@ -123,7 +123,7 @@ public class BattleShipContext {
         // more usable constructor...
         public SetupState(Player activePlayer, Player waitingPlayer, boolean gotoSetup) {
             super(activePlayer, waitingPlayer);
-            System.out.println("
+            System.out.println(activePlayer.toString() + " " + waitingPlayer.toString());
             this.gotoSetup = gotoSetup;
             this.battleString = activePlayer.toString() + " setup";
             this.nextString = gotoSetup ? "next player setup" : "let's battle!";
