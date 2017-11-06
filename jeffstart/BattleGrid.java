@@ -5,15 +5,11 @@ import java.io.*;
 import java.net.*;
 
 public abstract class BattleGrid extends JPanel{
-
-
-
-    
     public BattleGrid() {
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         JPanel self = new JPanel();
         self.setLayout(new GridLayout(0,10));
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < 10; i++) {
             for(int j =0; j < 10; j++) {
                 final Cell cell = getCell(i, j);
                 self.add(cell);
@@ -45,14 +41,10 @@ public abstract class BattleGrid extends JPanel{
                     }
                 });
             }
-        
+        }
         this.add(self);
     }
     
     protected abstract Cell getCell(int i, int j);
-    
-    public void click(MouseEvent e, Cell cell) {
-        // handle the event, for instance
-        cell.setBackground(Color.GRAY);
-    }
+    protected abstract void click(MouseEvent e, Cell cell);
 }

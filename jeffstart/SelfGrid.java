@@ -27,8 +27,7 @@ public class SelfGrid extends BattleGrid {
     
     public void click(MouseEvent e, Cell cell) {
         // handle the event, for instance
-        super.click(e, cell);
-        System.out.println(cell.getRow());
-        System.out.println(cell.getColumn());
+        cell.setBackground(Color.WHITE);
+        
     }
 }
