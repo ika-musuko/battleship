@@ -31,11 +31,13 @@ public class AttackGrid extends BattleGrid {
     @Override 
     public void click(MouseEvent e, Cell cell) {
         // handle the event
-        System.out.println(cell.toString());
-        this.context.gridAction(cell.getRow(), cell.getColumn());
-        Player activePlayer = this.context.getActive();
-        this.updateGrid(activePlayer.getAttackBoard());
-        this.status.update(context);
+        if(context.getCurrentState() instanceof BattleShipContext.AttackState){
+            System.out.println(cell.toString());
+            this.context.gridAction(cell.getRow(), cell.getColumn());
+            Player activePlayer = this.context.getActive();
+            this.updateGrid(activePlayer.getAttackBoard());
+            this.status.update(context);
+        }
     }
     
     public void updateGrid(int[][] attackBoard) {

@@ -182,6 +182,10 @@ public class Player {
     private boolean checkCoords(int[] coord1, int[] coord2) {
         return (coord1[0] == coord2[0] && coord1[1] == coord2[1]);
     }
+
+    public boolean allSunk() {
+        return this.sunkenShips == Player.MAX_SHIPS;
+    }
     
     // attack the other player on the current mark
     public Player attack(Player other) {
@@ -213,22 +217,25 @@ public class Player {
             // If attack was successful, damagedShip will have been set to an existing Ship
             if (damagedShip != null) {
                 damagedShip.reduceHealth();
-                if(damagedShip.isDead())
+                if(damagedShip.isDead()){
                     this.shipList.remove(i);
-
+                    other.sinkShip();
+                }
+                System.out.println("success");
                 this.attackBoard[this.currentMarkR][this.currentMarkC] = AttackSpace.SUCCESS; // this code will confirm that the attack was a success!
                 
                 other.selfBoard[this.currentMarkR][this.currentMarkC] = SelfSpace.DESTROYED;
-                other.sinkShip();
             }
             // failsafe
             else {
+                System.out.println("failsafe");
                 this.attackBoard[this.currentMarkR][this.currentMarkC] = AttackSpace.FAILURE; 
             }
         }
        
        // FAILURE ATTACK CASE
         else {
+            System.out.println("true fail");
             this.attackBoard[this.currentMarkR][this.currentMarkC] = AttackSpace.FAILURE; 
         }
         

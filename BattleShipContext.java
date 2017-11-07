@@ -65,6 +65,10 @@ public class BattleShipContext {
     public Player getWaiting() {
         return this.waitingPlayer;
     }
+
+    public BattleState getCurrentState() {
+        return this.currentState;
+    }
     
     private Player activePlayer; // the player with the current turn
     private Player waitingPlayer; // the other player who is waiting for his turn
@@ -189,9 +193,13 @@ public class BattleShipContext {
             // if a valid mark has been set...
             if(this.markSet) {
                 // takes the currently marked square from activePlayer and attacks the waiting player on the corresponding square and updates the waitingPlayer
-                this.waitingPlayer = this.activePlayer.attack(this.waitingPlayer); 
-                return (this.waitingPlayer.noShips()) ? new WinState(this.activePlayer, this.waitingPlayer) // win if all the other ships on the waitingPlayer's board are gone
-                                                      : new AttackState(this.waitingPlayer, this.activePlayer); // next turn
+                this.waitingPlayer = this.activePlayer.attack(this.waitingPlayer);
+                System.out.println("active player: "+this.activePlayer);
+                System.out.println("waiting player: "+this.waitingPlayer);
+                if (this.waitingPlayer.allSunk()) {
+                   return new WinState(this.activePlayer, this.waitingPlayer);
+                }
+                return new AttackState(this.waitingPlayer, this.activePlayer);
             } 
             
             // else do not change the state
