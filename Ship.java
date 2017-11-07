@@ -39,34 +39,44 @@ public class Ship
             int[] middleTest = shipList.get(i).getMiddle();
             int[] endTest = shipList.get(i).getEnd();
            
-            if(i == index)
-            {
+            if(i == index) // this means we found the correct ship in the shipList
+            { 
             	;
             }
             else
             {
-	            if(this.checkCoords(frontTest, frontAfterVertRotation) || this.checkCoords(frontTest, endAfterVertRotation)
-	            		|| (this.checkCoords(frontTest, frontAfterHorizRotation))  || (this.checkCoords(frontTest, endAfterHorizRotation)))
-	            {
-	            	return false;
-	            }
-	            if(this.checkCoords(middleTest, frontAfterVertRotation) || this.checkCoords(middleTest, endAfterVertRotation)
-	            		|| (this.checkCoords(middleTest, frontAfterHorizRotation))  || (this.checkCoords(middleTest, endAfterHorizRotation)))
-	            {
-	            	return false;
-	            }
-	            if(this.checkCoords(endTest, frontAfterVertRotation) || this.checkCoords(endTest, endAfterVertRotation)
-	            		|| (this.checkCoords(endTest, frontAfterHorizRotation))  || (this.checkCoords(endTest, endAfterHorizRotation)))
-	            {
-	            	return false;
-	            }
-	         }
+            	if(horizontal)
+            	{
+            		if(this.checkCoords(frontTest, frontAfterVertRotation) || this.checkCoords(frontTest, endAfterVertRotation))
+    	            {
+    	            	return false;
+    	            }
+    	            if(this.checkCoords(middleTest, frontAfterVertRotation) || this.checkCoords(middleTest, endAfterVertRotation))
+    	            {
+    	            	return false;
+    	            }
+    	            if(this.checkCoords(endTest, frontAfterVertRotation) || this.checkCoords(endTest, endAfterVertRotation))
+    	            {
+    	            	return false;
+    	            }
+            	}
+            	else
+            	{
+		            if((this.checkCoords(frontTest, frontAfterHorizRotation)) || (this.checkCoords(frontTest, endAfterHorizRotation)))
+		            {
+		            	return false;
+		            }
+		            if((this.checkCoords(middleTest, frontAfterHorizRotation)) || (this.checkCoords(middleTest, endAfterHorizRotation)))
+		            {
+		            	return false;
+		            }
+		            if((this.checkCoords(endTest, frontAfterHorizRotation)) || (this.checkCoords(endTest, endAfterHorizRotation)))
+		            {
+		            	return false;
+		            }
+            	}
+	        }
         }
-        
-        
-    	print_coord(this.front); // tester
-    	print_coord(this.middle);
-    	print_coord(this.end);
         
      // Horizontal to Vertical
     	if(horizontal) 
@@ -83,11 +93,10 @@ public class Ship
     		this.end[0] = this.middle[0];	 // decrement to vertical row coordinate
     		this.end[1]--;				     // revert to middle col coordinate
     	}
-    	
-    	
-    	return true;
-    	
+
+    	return true; 	
     }
+    
     
     private void print_coord(int[] coord) {
         System.out.println("COORD row: "+coord[0]+" col: "+coord[1]);

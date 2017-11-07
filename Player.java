@@ -30,6 +30,7 @@ public class Player {
     		
     		// Locate the index of the ship that is on (r, c)
     		int indexShip = findShipIndex(shipList, coord);
+    		System.out.println(indexShip); // tester print statement
     		shipToRotate = shipList.get(indexShip);
     		
     		
@@ -37,8 +38,12 @@ public class Player {
     		this.selfBoard[shipToRotate.getFront()[0]][shipToRotate.getFront()[1]] = SelfSpace.EMPTY;  // old front 
         	this.selfBoard[shipToRotate.getEnd()[0]][shipToRotate.getEnd()[1]] = SelfSpace.EMPTY;      // old end
     		
+        	
+        	// --->
+        	
         	boolean rotated = shipToRotate.rotateShip(shipList, indexShip);
         	System.out.println("Ship was able to rotate: " + rotated);  // test print statement
+        	printList(shipList);
         	
         	// Now update new front and end squares on selfBoard
         	this.selfBoard[shipToRotate.getFront()[0]][shipToRotate.getFront()[1]] = SelfSpace.SHIP;   // new front
@@ -80,6 +85,14 @@ public class Player {
         System.out.println("COORD row: "+coord[0]+" col: "+coord[1]);
     }
     
+    private void printList(ArrayList <Ship> shipList)
+    {
+    	for(int i = 0; i < shipList.size(); ++i)
+    	{
+    		System.out.println("ship #" + i + " " + shipList.get(i));
+    	}
+    }
+    
     // factory function to make a ship and manage coordinates
     private Ship makeShip(int row, int col) {
     	
@@ -109,7 +122,7 @@ public class Player {
         
         // If all tests passed so far, create a new ship objects out of these 3 
         Ship shipNew = new Ship(front, middle, end);  // new ship object
-        
+        Ship shipTemp = shipNew;  // this will
         
         // Check if either front or end coordinates are on an existing cell on the board
         if (this.selfBoard[front[0]][front[1]] != SelfSpace.EMPTY || this.selfBoard[end[0]][end[1]] != SelfSpace.EMPTY)
@@ -122,17 +135,13 @@ public class Player {
         }      
         return shipNew;
     }
+
     
     public int findShipIndex(ArrayList <Ship> shipList, int [] coord)
     {
     	int indexShip = 0;  // initialize to the first ship in shipList
     	for (int i = 0; i < shipList.size(); ++i)    // traverse through the ArrayList of ships
         {
-			System.out.println("ship # 0: " + shipList.get(i));
-			//System.out.println("getFront: " + shipList.get(i).getFront());
-			//System.out.println("getMiddle: " + shipList.get(i).getMiddle());
-			//System.out.println("getEnd: " + shipList.get(i).getEnd());
-			
 			if(checkCoords(shipList.get(i).getFront(),(coord)) || checkCoords(shipList.get(i).getMiddle(),(coord)) 
 					|| checkCoords(shipList.get(i).getEnd(),(coord)))  // if(coord matches a ship in the shipList)
 			{
