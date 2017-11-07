@@ -20,32 +20,60 @@ public class Player {
     }
     
     // place or rotate a ship
-    public void placeShip(int r, int c) {  
-        // too many ships!
-        if (this.shipList.size() >= Player.MAX_SHIPS) {
-            return;
-        }
-        // try to generate a new ship
-        Ship ship1 = this.makeShip(r, c);
-        if (ship1 == null) {
-            System.out.println("no ship");
-            return; // if not a valid place to make a ship
-        }
-        System.out.println("ship");
-        // assign corresponding squares to SHIP
-        int[] front = ship1.getFront();
-        int[] middle = ship1.getMiddle();
-        int[] end = ship1.getEnd();
-        
-        this.selfBoard[front[0]][front[1]] = SelfSpace.SHIP;
-        print_coord(front);
-        this.selfBoard[middle[0]][middle[1]] = SelfSpace.SHIP;
-        print_coord(middle);
-        this.selfBoard[end[0]][end[1]] = SelfSpace.SHIP;
-        print_coord(end);
-        
-        // push to the current list of ships
-        this.shipList.add(ship1);
+    public void placeShip(int r, int c) {      // r and c passed in from a mouse click
+
+    	// this if block handles rotating existing ships
+    	if(this.selfBoard[r][c] == SelfSpace.SHIP)  // if coordinate (r, c) is ON an existing ship
+    	{
+    		int [] coord = {r, c};   		
+    		Ship shipToRotate = null;
+    		
+    		// Locate the index of the ship that is on (r, c)
+    		int indexShip = findShipIndex(shipList, coord);
+    		shipToRotate = shipList.get(indexShip);
+    		
+    		
+    		// remove old ship front and end squares on selfBoard
+    		this.selfBoard[shipToRotate.getFront()[0]][shipToRotate.getFront()[1]] = SelfSpace.EMPTY;  // old front 
+        	this.selfBoard[shipToRotate.getEnd()[0]][shipToRotate.getEnd()[1]] = SelfSpace.EMPTY;      // old end
+    		
+        	boolean rotated = shipToRotate.rotateShip(shipList, indexShip);
+        	System.out.println("Ship was able to rotate: " + rotated);  // test print statement
+        	
+        	// Now update new front and end squares on selfBoard
+        	this.selfBoard[shipToRotate.getFront()[0]][shipToRotate.getFront()[1]] = SelfSpace.SHIP;   // new front
+        	this.selfBoard[shipToRotate.getEnd()[0]][shipToRotate.getEnd()[1]] = SelfSpace.SHIP;       // new end
+
+    	}
+    	else // this block handles placing new ship
+    	{
+    		// check if there's already 5 ships in shipList
+    		if(shipList.size() == MAX_SHIPS)  
+        	{
+        		return;
+        	}
+    		
+    		Ship ship1 = this.makeShip(r, c);  
+    		if (ship1 == null) {
+    			System.out.println("Failed to place ship!");
+    			return; // if not a valid place to make a ship
+    		}
+    		System.out.println("Successfully placed ship!");
+    		// assign corresponding squares to SHIP
+    		int[] front = ship1.getFront();
+    		int[] middle = ship1.getMiddle();
+    		int[] end = ship1.getEnd();
+    	
+    		this.selfBoard[front[0]][front[1]] = SelfSpace.SHIP;
+    		print_coord(front);
+    		this.selfBoard[middle[0]][middle[1]] = SelfSpace.SHIP;
+    		print_coord(middle);
+    		this.selfBoard[end[0]][end[1]] = SelfSpace.SHIP;
+    		print_coord(end);
+
+    		// push to the current list of ships
+    		this.shipList.add(ship1);
+    	}
     }
     
     private void print_coord(int[] coord) {
@@ -58,11 +86,11 @@ public class Player {
     	// coordinates of center of new ship
     	int[] middle = {row, col};
     	
-        // EDGE CASE 1: middle of a ship positioned in a corner results in invalid positioning
+        // MIDDLE COORD TEST 1: check if middle of a ship is positioned in a corner which would result in invalid positioning
         if ((row == 0 || row == Player.DEFAULT_BOARD_SIZE-1) && (col == 0 || col == Player.DEFAULT_BOARD_SIZE-1))
             return null;
-      
-        // Check if the middle coordinate is on an existing cell on the board
+          
+        // MIDDLE COORD TEST 2: check if the middle coordinate is on an existing ship on the board
         if (this.selfBoard[middle[0]][middle[1]] != SelfSpace.EMPTY) {
             return null;
         }
@@ -71,7 +99,7 @@ public class Player {
         int[] front = {row+1, col};
         int[] end = {row-1, col}; 
         
-        // EDGE CASE 2: ship front or end coordinates are out of bounds (happens if middle touching board edge)
+        // FRONT AND END TEST 1: check if the ship's front or end coordinates are out of bounds (happens if middle touching board edge)
         if (row-1 < 0 || row+1 >= Player.DEFAULT_BOARD_SIZE) {
             front[0] = row;   // revert to middle row coordinate
             front[1] = col+1; // change to horizontal orientation coordinate
@@ -79,12 +107,39 @@ public class Player {
             end[1] = col-1;   // change to horizontal orientation coordinate
         }
         
-        // Check if either front or end coordinates are on an existing cell on the board
-        if (this.selfBoard[front[0]][front[1]] != SelfSpace.EMPTY || this.selfBoard[end[0]][end[1]] != SelfSpace.EMPTY) {
-            return null;
-        }
+        // If all tests passed so far, create a new ship objects out of these 3 
+        Ship shipNew = new Ship(front, middle, end);  // new ship object
         
-        return new Ship(front, middle, end);
+        
+        // Check if either front or end coordinates are on an existing cell on the board
+        if (this.selfBoard[front[0]][front[1]] != SelfSpace.EMPTY || this.selfBoard[end[0]][end[1]] != SelfSpace.EMPTY)
+        {
+        	// attempt to rotate to place ship in valid position
+        	int indexShip = findShipIndex(shipList, middle);
+        	boolean test = shipNew.rotateShip(shipList, indexShip);
+        	System.out.println(test);
+            //return null;
+        }      
+        return shipNew;
+    }
+    
+    public int findShipIndex(ArrayList <Ship> shipList, int [] coord)
+    {
+    	int indexShip = 0;  // initialize to the first ship in shipList
+    	for (int i = 0; i < shipList.size(); ++i)    // traverse through the ArrayList of ships
+        {
+			System.out.println("ship # 0: " + shipList.get(i));
+			//System.out.println("getFront: " + shipList.get(i).getFront());
+			//System.out.println("getMiddle: " + shipList.get(i).getMiddle());
+			//System.out.println("getEnd: " + shipList.get(i).getEnd());
+			
+			if(checkCoords(shipList.get(i).getFront(),(coord)) || checkCoords(shipList.get(i).getMiddle(),(coord)) 
+					|| checkCoords(shipList.get(i).getEnd(),(coord)))  // if(coord matches a ship in the shipList)
+			{
+				indexShip = i;
+			}
+        }
+    	return indexShip;
     }
     
     // return the total amount of ships
