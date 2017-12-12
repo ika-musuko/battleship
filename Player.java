@@ -196,29 +196,30 @@ public class Player {
             // Check every possible ship's coordinate to see if there was a hit
             // If found, set damagedShip to that specific ship
             int i = 0;
-            for (; i < this.shipList.size(); ++i) {
-                int[] front =  this.shipList.get(i).getFront();
+            for (; i < other.shipList.size(); ++i) {
+                int[] front =  other.shipList.get(i).getFront();
                 if(this.checkCoords(front, attacked)){
-                    damagedShip = this.shipList.get(i);
+                    damagedShip = other.shipList.get(i);
                     break;
                 }
-                int[] middle =  this.shipList.get(i).getMiddle();
+                int[] middle =  other.shipList.get(i).getMiddle();
                 if(this.checkCoords(middle, attacked)){
-                    damagedShip =  this.shipList.get(i);
+                    damagedShip =  other.shipList.get(i);
                     break;
                 }
                 int[] end =  this.shipList.get(i).getEnd();
                 if(this.checkCoords(end, attacked)){
-                    damagedShip =  this.shipList.get(i);
+                    damagedShip =  other.shipList.get(i);
                     break;
                 }
+                System.out.println("");
             }
             
             // If attack was successful, damagedShip will have been set to an existing Ship
             if (damagedShip != null) {
                 damagedShip.reduceHealth();
                 if(damagedShip.isDead()){
-                    this.shipList.remove(i);
+                    other.shipList.remove(i);
                     other.sinkShip();
                 }
                 System.out.println("success");
